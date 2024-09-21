@@ -38,9 +38,11 @@ src/util/timestamp.cc
 all: sender receiver
 
 sender: $(SRC_SENDER)
+	@mkdir -p build
 	$(CXX) $(SRC_SENDER) -o build/sender $(CXXFLAGS) $(LDFLAGS_VPX)
 
 receiver: $(SRC_RECEIVER)
+	@mkdir -p build
 	$(CXX) $(SRC_RECEIVER) -o build/receiver $(CXXFLAGS) $(CXXFLAGS_SDL) $(LDFLAGS_VPX) $(LDFLAGS_SDL)
 
 clean:
