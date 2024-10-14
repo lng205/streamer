@@ -8,4 +8,4 @@
 
 1. 安装依赖`pip install -r requirements.txt`
 2. 运行服务器`python server.py`
-3. 浏览器访问`http://localhost:8080`
+3. 浏览器访问`http://localhost:8080`（或使用网络中的其他设备访问服务器IP的8080端口）
