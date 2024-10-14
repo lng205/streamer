@@ -9,3 +9,7 @@
 1. 安装依赖`pip install -r requirements.txt`
 2. 运行服务器`python server.py`
 3. 浏览器访问`http://localhost:8080`（或使用网络中的其他设备访问服务器IP的8080端口）
+
+## 后续工作
+
+1. aiortc的StreamTrack.recv接口返回pyav.audio/video/packet对象，如果需要传输自定义数据结构，需要实现packet的encode/decode方法。
