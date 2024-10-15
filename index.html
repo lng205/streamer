@@ -8,7 +8,7 @@
 
 <body>
     <h1>WebRTC Synthetic Video Stream</h1>
-    <video id="video" playsinline controls></video>
+    <video id="video" playsinline autoplay></video>
 
     <script>
         const videoElement = document.getElementById('video');
@@ -35,6 +35,7 @@
 
             // Get the SDP answer from the server
             const answer = await response.json();
+            console.log(answer);
             await pc.setRemoteDescription(new RTCSessionDescription(answer));
         }
 
