@@ -1,6 +1,9 @@
 from aiohttp import web
 from aiortc import RTCPeerConnection, RTCSessionDescription
-from track import SyntheticVideoStreamTrack as Track
+from track import Track, SharedVideoSource
+
+# Create a shared video source
+video_source = SharedVideoSource()
 
 
 async def index(request):
@@ -12,8 +15,7 @@ async def offer(request: web.Request):
     offer = RTCSessionDescription(sdp=params["sdp"], type=params["type"])
 
     pc = RTCPeerConnection()
-
-    video_track = Track()
+    video_track = Track(video_source)
     pc.addTrack(video_track)
 
     # Set remote description and create an answer

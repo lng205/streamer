@@ -10,43 +10,16 @@
     <h1>WebRTC Synthetic Video Stream</h1>
     <video id="video" playsinline autoplay></video>
 
-    <label for="codec">Select Video Codec: </label>
-    <select id="codec">
-        <option value="VP8">VP8</option>
-        <option value="H264">H264</option>
-    </select>
-    <button id="startStream">Start Stream</button>
-
     <script>
         const videoElement = document.getElementById('video');
-        const codecSelect = document.getElementById('codec');
-        const startStreamButton = document.getElementById('startStream');
         const pc = new RTCPeerConnection();
-        const transceiver = pc.addTransceiver('video', { direction: 'recvonly' });
+        pc.addTransceiver('video', { direction: 'recvonly' });
 
         pc.ontrack = (event) => {
             videoElement.srcObject = event.streams[0];
         };
 
-        // Set codec preferences based on user selection
-        function setCodecPreference() {
-            const selectedCodec = codecSelect.value;
-            const codecs = RTCRtpSender.getCapabilities('video').codecs;
-
-            // Filter the codecs to find the one matching the selected codec
-            const preferredCodecs = codecs.filter(codec => codec.mimeType.includes(selectedCodec));
-
-            if (preferredCodecs.length > 0) {
-                // Set codec preferences on the transceiver
-                transceiver.setCodecPreferences(preferredCodecs);
-            } else {
-                console.warn(`No available codec matches ${selectedCodec}`);
-            }
-        }
-
         async function negotiate() {
-            setCodecPreference();
-
             const offer = await pc.createOffer();
             await pc.setLocalDescription(offer);
 
@@ -58,6 +31,9 @@
                     type: pc.localDescription.type
                 }),
                 headers: { 'Content-Type': 'application/json' }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
             });
 
             // Get the SDP answer from the server
@@ -66,8 +42,8 @@
             await pc.setRemoteDescription(new RTCSessionDescription(answer));
         }
 
-        // Attach event listener to start streaming when the button is clicked
-        startStreamButton.addEventListener('click', negotiate);
+        // Run the negotiation process
+        negotiate();
     </script>
 </body>
 
