@@ -3,7 +3,7 @@ from aiortc import RTCPeerConnection, RTCSessionDescription
 from track import Track, SharedVideoSource
 
 # Create a shared video source
-video_source = SharedVideoSource()
+video_source = SharedVideoSource(width=640, height=480)
 
 
 async def index(request):

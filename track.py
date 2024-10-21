@@ -7,10 +7,13 @@ from fractions import Fraction
 
 # Shared video source class to capture frames in the background
 class SharedVideoSource:
-    def __init__(self, camera_index=0, frame_rate=30):
+    def __init__(self, camera_index=0, frame_rate=30, width=1920, height=1080):
         self.cap = cv2.VideoCapture(camera_index)
         if not self.cap.isOpened():
             raise Exception(f"Unable to open video source {camera_index}")
+
+        self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, width)
+        self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
 
         self.frame_rate = frame_rate
         self.frame = None
