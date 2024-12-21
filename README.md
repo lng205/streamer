@@ -13,9 +13,10 @@ Download the demo raw [video](https://media.xiph.org/video/derf/y4m/ice_4cif_30f
 
 ### Compile
 
-Use `make` to compile the code.
+Run `cmake build -S . -B build` in the project root to generate the build files.
+Then use `cmake --build build` to compile the code.
 
 ### Run
 
 - Use `build/sender 12345 ice_4cif_30fps.y4m` to start the sender.
-- Use `build/receiver 127.0.0.1 12345 704 576 --fps30 --cbr 500` to request the demo video.
+- Use `build/receiver 127.0.0.1 12345 704 576 --fps 30 --cbr 500` to request the demo video.

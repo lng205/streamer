@@ -29,3 +29,19 @@ A collection of all the notes taken during the development of the project.
 
 - reentrant(re-entrant) means the code can be interrupted and re-entered.
 - The compiler flag -D_REENTRANT is used to enable reentrant version of implementations.
+
+
+#### CMake Notes
+
+- find_package() is used to find and load a package and it has to work with existing CMake modules.
+    - e.g. `find_package(OpenCV REQUIRED)`
+    - `find_packet(libpvx)` will not work because there is no CMake module for libvpx.
+    - However, `pkg-config` can be used to find libvpx and there is a CMake module for pkg-config.
+
+- Group subdirectories using `add_subdirectory()`.
+    - Compile subdirectories into libraries using `add_library()` in the subdirectories' CMakeLists.txt.
+    - By default, the `add_library()` command will build a static library, and the final executable will be linked against it.
+
+- Include path needs to be explicitly specified using `target_include_directories()`.
+    - `target_include_directories(target PUBLIC include)` will not search subdirectories.
+    - The `PUBLIC` keyword is used to propagate the include path to the target's dependents.
