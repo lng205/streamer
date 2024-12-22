@@ -1,4 +1,4 @@
-### Notes
+## Notes
 
 A collection of all the notes taken during the development of the project.
 
@@ -31,7 +31,7 @@ A collection of all the notes taken during the development of the project.
 - The compiler flag -D_REENTRANT is used to enable reentrant version of implementations.
 
 
-#### CMake Notes
+### CMake Notes
 
 - find_package() is used to find and load a package and it has to work with existing CMake modules.
     - e.g. `find_package(OpenCV REQUIRED)`
@@ -81,3 +81,28 @@ A collection of all the notes taken during the development of the project.
     - The output folder cannot exist before running the script.
     - (Optional) May need to install the font 'Times New Roman' for the plot.
         - Use `python3 -c "import matplotlib as mpl; print(mpl.matplotlib_fname())"` to find the matplotlibrc cache and clear it.
+
+### Mahimahi Notes
+
+- Mahimahi will create a shell environment for each command.
+- Basic commands: `mm-delay` `mm-loss`.
+- Each shell would have a virtual network interface.
+    - Using `ifconfig` can verify that the virtual the virtual interface would connect to the outer shell via a PPP link:
+    ```text
+    $ ifconfig
+    ingress: flags=81<UP,POINTOPOINT,RUNNING>  mtu 1500
+    inet 10.0.0.2  netmask 255.255.255.255  destination 10.0.0.1
+    inet6 fe80::a9da:9a55:25c3:33e5  prefixlen 64  scopeid 0x20<link>
+    unspec 00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00  txqueuelen 500  (UNSPEC)
+    RX packets 1978  bytes 2104768 (2.1 MB)
+    RX errors 0  dropped 0  overruns 0  frame 0
+    TX packets 1927  bytes 83918 (83.9 KB)
+    TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+    ```
+    - The address pointing to the host outside all containers can be accessed by the env var `MAHIMAHI_BASE` in the shell.
+
+### C++ Notes
+
+- Use `extern "C" {}` to include C code in C++.
+    - C++ code include extra information in the function name for overloading, which is not present in C.
+    - The compiler will automatically add this to standard C libraries.
