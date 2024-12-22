@@ -45,3 +45,39 @@ A collection of all the notes taken during the development of the project.
 - Include path needs to be explicitly specified using `target_include_directories()`.
     - `target_include_directories(target PUBLIC include)` will not search subdirectories.
     - The `PUBLIC` keyword is used to propagate the include path to the target's dependents.
+
+### Tambur Deployment Notes
+
+1. Run the install commands per `tambur_install.sh`
+    - `mahimahi` ppa doesn't support Ubuntu 24.04 LTS, so it needs to be compiled from source.
+    - Some code would report error when compiling with GCC13, e.g. `#include <cstdint>`
+    - `gf-complete`, `Jerasure`, `libtorch`, `maxflow`, `nlohmann`(for json), `ringmaster` should be installed in third_party folder.
+
+2. Modify the reading script `run-config.py` to read the video file as binary:
+    ```py
+    with open(y4m_path, 'rb') as y4m_fh:
+    try:
+        line = y4m_fh.readline(MAX_BUFFER)
+    except:
+        sys.exit(f'ERROR: {y4m_path} is not a valid .y4m file')
+
+    for item in line.split():
+        item = item.decode()
+        if item[0] == 'W':
+            width = int(item[1:])
+        elif item[0] == 'H':
+            height = int(item[1:])
+    ```
+
+3. (Optional) Modify the thread usage in src/ringmaster_app/encoder.cc and decoder.cc to leave enough threads for the fec.
+    - e.g. `const unsigned int cpu_used = min(get_nprocs(), 4);`
+
+4. Download the video and run with command `python3 src/ringmaster_scripts/bootstrap.py --num_sender_receiver_pairs 1 --videos_folder ~/codes/tambur/video --config third_party/ringmaster_configs/experiment_random_variable.json --offset 0 > out.log 2>&1`
+    - Most outputs are stderr and need to be redirected to stdout(`2>&1`).
+    - The `--offset` parameter is used to specify the port.
+    - The script will run for `timeout + 5` seconds. The timeout is specified in the json file.
+
+5. Plot the results: `src/plot/generate_all_plots_FEC_only.sh --config=logs_random_variable_GE/experiment_random_variable.json --plot-folder=output`
+    - The output folder cannot exist before running the script.
+    - (Optional) May need to install the font 'Times New Roman' for the plot.
+        - Use `python3 -c "import matplotlib as mpl; print(mpl.matplotlib_fname())"` to find the matplotlibrc cache and clear it.
